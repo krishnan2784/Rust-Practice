@@ -10,42 +10,53 @@ pub struct Car {
 
 }
 
-pub fn car_factory(color: String, motor: Transmission, roof: bool, miles: u32) -> Car {
+// Build "Car" using input arguments
+pub fn car_factory(order: i32, miles: u32) -> Car {
+    let colors = ["Blue", "Green", "Red", "Silver"];
 
-    let car = // Create a new "Car" instance as requested
-        // - Bind first three fields to values of input arguments
-        // - Bind "age" to tuple returned from car_quality(miles)
-        Car {
-            color,
-            motor,
-            roof,
-            age: car_quality(miles)
-        };
-
-    if car.age.0 == Age::Used {
-        if roof {
-            println!("Preparing a used car: {:?}, {}, {}, {} miles", car.motor, car.color, get_roof_style(car.roof), car.age.1);
-        } else {
-            println!("Preparing a used car: {:?}, {}, {}, {} miles", car.motor, car.color,get_roof_style(car.roof), car.age.1);
-        }
-    } else {
-        if roof {
-            println!("Building a new car: {:?}, {}, {}, {} miles", car.motor, car.color,get_roof_style(car.roof), car.age.1);
-        } else {
-            println!("Building a new car: {:?}, {}, {}, {} miles", car.motor, car.color,get_roof_style(car.roof), car.age.1);
-        }
+    // Prevent panic: Check color index for colors array, reset as needed
+    // Valid color = 1, 2, 3, or 4
+    // If color > 4, reduce color to valid index
+    let mut color = order as usize;
+    if color > 4 {
+        // color = 5 --> index 1, 6 --> 2, 7 --> 3, 8 --> 4
+        color = color - 4;
     }
 
-    return car;
+    // Add variety to orders for motor type and roof type
+    let mut motor = Transmission::Manual;
+    let mut roof = true;
+    if order % 3 == 0 {          // 3, 6, 9
+        motor = Transmission::Automatic;
+    } else if order % 2 == 0 {   // 2, 4, 8, 10
+        motor = Transmission::SemiAuto;
+        roof = false;
+    }                            // 1, 5, 7, 11
+
+    // Return requested "Car"
+    Car {
+        color: String::from(colors[(color-1) as usize]),
+        motor: motor,
+        roof: roof,
+        age: car_quality(miles)
+    }
 }
+
+// Get the car quality by testing the value of the input argument
+// - miles (u32)
+// Return tuple with car age ("New" or "Used") and mileage
 fn car_quality (miles: u32) -> (Age, u32) {
 
-    if miles > 0{
-        return (Age::Used,miles);
+    // Check if car has accumulated miles
+    // Return tuple early for Used car
+    if miles > 0 {
+        return (Age::Used, miles);
     }
-    return (Age::New, miles)
-}
 
+    // Return tuple for New car, no need for "return" keyword or semicolon
+    (Age::New, miles)
+}
+/*
 fn get_roof_style(roof:bool) -> String {
     return if roof {
         "Hard top"
@@ -53,4 +64,6 @@ fn get_roof_style(roof:bool) -> String {
         "Convertible"
     }.to_string()
 }
+*/
+
 
