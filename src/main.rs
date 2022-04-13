@@ -1,34 +1,26 @@
-use crate::CarStruct::Car;
-use crate::TransmissionStruct::Transmission;
-
-mod TransmissionStruct;
-mod CarStruct;
+use crate::car_struct::{car_factory};
+use crate::transmission_struct::Transmission;
 
 
+mod car_struct;
+mod transmission_struct;
+mod age_struct;
 
 
 fn main() {
-    let mut car = car_factory(String::from("Red"), Transmission::Manual, false);
-    println!("Car 1 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.mileage);
+    // Car order #1: New, Manual, Hard top
+    car_factory(String::from("Orange"), Transmission::Manual, true, 0);
 
-    car = car_factory(String::from("Silver"), Transmission::Automatic, true);
-    println!("Car 2 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.mileage);
+    // Car order #2: Used, Semi-automatic, Convertible
+    car_factory(String::from("Red"), Transmission::SemiAuto, false, 565);
 
-    car = car_factory(String::from("Yellow"), Transmission::SemiAuto, false);
-    println!("Car 3 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.mileage);
+    // Car order #3: Used, Automatic, Hard top
+    car_factory(String::from("White"), Transmission::Automatic, true, 3000);
 }
 
 
-// Build a "Car" by using values from the input arguments
-// - Color of car (String)
-// - Transmission type (enum value)
-// - Convertible (boolean, true if car is a convertible)
-fn car_factory(color: String, transmission: Transmission, convertible: bool) -> Car{
 
-    Car {
-        color,
-        transmission,
-        convertible,
-        mileage: 0
-    }
-}
+
+
+
+
